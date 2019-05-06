@@ -3,7 +3,7 @@ Ormedia
 You can run the application using: 'mvn spring-boot:run' from command line in file project
  and then tap in browser: 'localhost:8080'
 
-Or you can build the JAR file with: mvn clean package
+Or you can build the JAR file with: 'mvn clean package'
  Then you can run the JAR file like:
  java -jar /home/avi/IdeaProjects/ormedia/target/ormedia-1.0-SNAPSHOT.jar
  (make sure that the way to '.jar' file is correct)
