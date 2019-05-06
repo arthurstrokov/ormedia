@@ -38,6 +38,7 @@ public class MainController {
     }
 
     @GetMapping("/main")
+    //TODO naming
     public String main(@RequestParam(required = false, defaultValue = "") String filter, Model model) {
         Iterable<Film> films;
 
@@ -68,6 +69,7 @@ public class MainController {
 
             model.mergeAttributes(errorsMap);
             model.addAttribute("film", film);
+            //TODO is it be the same page for success and error?
         } else {
             saveFile(film, file);
 
@@ -79,10 +81,11 @@ public class MainController {
         Iterable<Film> films = filmRepository.findAll();
 
         model.addAttribute("films", films);
-
+       // TODO what else attributes? filter, success message maybe?
         return "main";
     }
 
+    //TODO naming
     private void saveFile(@Valid Film film, @RequestParam("file") MultipartFile file) throws IOException {
         if (file != null && !file.getOriginalFilename().isEmpty()) {
             File uploadDir = new File(uploadPath);
@@ -105,6 +108,7 @@ public class MainController {
             @AuthenticationPrincipal User currentUser,
             @PathVariable User user,
             Model model,
+        //XXX what is the purpose of film here?
             @RequestParam(required = false) Film film
     ) {
         Set<Film> films = user.getFilms();
@@ -138,6 +142,7 @@ public class MainController {
 
             filmRepository.save(film);
         }
+        //TODO what is else branch?  How to show user success or failure?
 
         return "redirect:/user-films/" + user;
     }
