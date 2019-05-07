@@ -29,6 +29,11 @@
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"
             integrity="sha384-smHYKdLADwkXOn1EmN1qk/HfnUcbVRZyYmZ4qpPea6sjB/pTJ0euyQp0Mk8ck+5T"
             crossorigin="anonymous"></script>
+
+    <script src="//code.jquery.com/jquery.min.js"></script>
+    <link href="/static/scripts/rateit.css" rel="stylesheet" type="text/css">
+    <script src="/static/scripts/jquery.rateit.js"></script>
+
     </body>
     </html>
 </#macro>

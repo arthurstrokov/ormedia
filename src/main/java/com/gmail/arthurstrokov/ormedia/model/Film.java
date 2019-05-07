@@ -5,6 +5,7 @@ import org.hibernate.validator.constraints.Length;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
+import java.util.Set;
 
 @Entity
 public class Film {
@@ -28,6 +29,9 @@ public class Film {
     private User author;
 
     private String filename;
+
+    @OneToMany(mappedBy = "film")
+    Set<FilmRating> filmRatings;
 
     public Film() {
     }
@@ -89,5 +93,26 @@ public class Film {
 
     public void setYear(String year) {
         this.year = year;
+    }
+
+    public Set<FilmRating> getFilmRatings() {
+        return filmRatings;
+    }
+
+    public void setFilmRatings(Set<FilmRating> filmRatings) {
+        this.filmRatings = filmRatings;
+    }
+
+    @Override
+    public String toString() {
+        return "Film{" +
+                "id=" + id +
+                ", title='" + title + '\'' +
+                ", genre='" + genre + '\'' +
+                ", year='" + year + '\'' +
+                ", author=" + author +
+                ", filename='" + filename + '\'' +
+                ", filmRatings=" + filmRatings +
+                '}';
     }
 }

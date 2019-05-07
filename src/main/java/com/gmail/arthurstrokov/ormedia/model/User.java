@@ -41,6 +41,9 @@ public class User implements UserDetails {
     @OneToMany(mappedBy = "author", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private Set<Film> films;
 
+    @OneToMany(mappedBy = "user")
+    Set<FilmRating> filmRatings;
+
     public boolean isAdmin() {
         return roles.contains(Role.ADMIN);
     }
@@ -132,6 +135,14 @@ public class User implements UserDetails {
 
     public void setFilms(Set<Film> films) {
         this.films = films;
+    }
+
+    public Set<FilmRating> getFilmRatings() {
+        return filmRatings;
+    }
+
+    public void setFilmRatings(Set<FilmRating> filmRatings) {
+        this.filmRatings = filmRatings;
     }
 
     @Override

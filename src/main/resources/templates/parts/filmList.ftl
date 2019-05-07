@@ -10,6 +10,22 @@
                 <span>Title: ${film.title}</span><br/>
                 <i>Genre: ${film.genre}</i><br/>
                 <i>Year: ${film.year}</i><br/>
+
+                <div>
+                    <#if film.ratings??>
+                        ${film.ratings}
+                        ${film.ratings.rating}
+                    <#else>
+                        no rated else
+                    </#if>
+                </div>
+
+                <input type="range" value="0" step="1" id="backing5" hidden name="range">
+                <div class="rateit" data-rateit-backingfld="#backing5" data-rateit-resetable="false"
+                     data-rateit-ispreset="true"
+                     data-rateit-min="0" data-rateit-max="5">
+                </div>
+
             </div>
             <div class="card-footer text-muted">
                 <a href="/user-films/${film.author.id}">${film.authorName}</a>
