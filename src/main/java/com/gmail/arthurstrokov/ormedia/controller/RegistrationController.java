@@ -49,7 +49,13 @@ public class RegistrationController {
 
             return "registration";
         }
-
+/**
+XXX maybe such way?
+String errorMessage = userService.addUser(user);
+if (errorMessage!=null){
+           model.addAttribute("usernameError", errorMessage);
+ }
+*/
         if (!userService.addUser(user)) {
             model.addAttribute("usernameError", "User exists!");
             return "registration";
