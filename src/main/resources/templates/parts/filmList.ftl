@@ -8,8 +8,8 @@
             </#if>
             <div class="m-2">
                 <span>Title: ${film.title}</span><br/>
-                <i>#Genre: ${film.genre}</i>
-                <i>#Year: ${film.year}</i>
+                <i>#Genre: ${film.genre}</i><br/>
+                <i>#Year: ${film.year}</i><br/>
             </div>
             <div class="card-footer text-muted">
                 <a href="/user-films/${film.author.id}">${film.authorName}</a>
