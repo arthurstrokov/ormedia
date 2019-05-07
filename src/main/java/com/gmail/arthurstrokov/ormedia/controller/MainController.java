@@ -71,7 +71,7 @@ public class MainController {
             model.addAttribute("film", film);
             //TODO is it be the same page for success and error?
         } else {
-            saveFile(film, file);
+            uploadImage(film, file);
 
             model.addAttribute("film", null);
 
@@ -85,8 +85,7 @@ public class MainController {
         return "main";
     }
 
-    //TODO naming
-    private void saveFile(@Valid Film film, @RequestParam("file") MultipartFile file) throws IOException {
+    private void uploadImage(@Valid Film film, @RequestParam("file") MultipartFile file) throws IOException {
         if (file != null && !file.getOriginalFilename().isEmpty()) {
             File uploadDir = new File(uploadPath);
 
@@ -138,7 +137,7 @@ public class MainController {
                 film.setTitle(title);
             }
 
-            saveFile(film, file);
+            uploadImage(film, file);
 
             filmRepository.save(film);
         }

@@ -46,21 +46,14 @@ public class RegistrationController {
             Map<String, String> errors = ControllerUtils.getErrors(bindingResult);
 
             model.mergeAttributes(errors);
-
             return "registration";
         }
-/**
-XXX maybe such way?
-String errorMessage = userService.addUser(user);
-if (errorMessage!=null){
-           model.addAttribute("usernameError", errorMessage);
- }
-*/
-        if (!userService.addUser(user)) {
+
+        boolean dublicateUsername = userService.addUser(user);
+        if (!dublicateUsername) {
             model.addAttribute("usernameError", "User exists!");
             return "registration";
         }
-
         return "redirect:/login";
     }
 }
