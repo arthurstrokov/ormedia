@@ -81,7 +81,7 @@ public class MainController {
         Iterable<Film> films = filmRepository.findAll();
 
         model.addAttribute("films", films);
-       // TODO what else attributes? filter, success message maybe?
+        // TODO what else attributes? filter, success message maybe?
         return "main";
     }
 
@@ -107,7 +107,7 @@ public class MainController {
             @AuthenticationPrincipal User currentUser,
             @PathVariable User user,
             Model model,
-        //XXX what is the purpose of film here?
+            //XXX what is the purpose of film here?
             @RequestParam(required = false) Film film
     ) {
         Set<Film> films = user.getFilms();
@@ -126,15 +126,21 @@ public class MainController {
             @RequestParam("id") Film film,
             @RequestParam("title") String title,
             @RequestParam("genre") String genre,
+            @RequestParam("year") String year,
             @RequestParam("file") MultipartFile file
     ) throws IOException {
         if (film.getAuthor().equals(currentUser)) {
+
+            if (!StringUtils.isEmpty(title)) {
+                film.setTitle(title);
+            }
+
             if (!StringUtils.isEmpty(genre)) {
                 film.setGenre(genre);
             }
 
-            if (!StringUtils.isEmpty(title)) {
-                film.setTitle(title);
+            if (!StringUtils.isEmpty(year)) {
+                film.setYear(year);
             }
 
             uploadImage(film, file);
