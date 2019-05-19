@@ -1,6 +1,7 @@
 package com.gmail.arthurstrokov.ormedia.controller;
 
 import com.gmail.arthurstrokov.ormedia.model.Film;
+import com.gmail.arthurstrokov.ormedia.model.FilmRating;
 import com.gmail.arthurstrokov.ormedia.model.User;
 import com.gmail.arthurstrokov.ormedia.repository.FilmRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,12 +20,13 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.validation.Valid;
 import java.io.File;
 import java.io.IOException;
+import java.util.Collections;
 import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
 
 @Controller
-public class MainController {
+public class FilmController {
 
     @Autowired
     private FilmRepository filmRepository;
@@ -38,8 +40,7 @@ public class MainController {
     }
 
     @GetMapping("/main")
-    //TODO naming
-    public String main(@RequestParam(required = false, defaultValue = "") String filter, Model model) {
+    public String films(@RequestParam(required = false, defaultValue = "") String filter, Model model) {
         Iterable<Film> films;
 
         if (filter != null && !filter.isEmpty()) {
@@ -149,6 +150,26 @@ public class MainController {
         }
         //TODO what is else branch?  How to show user success or failure?
 
+        return "redirect:/user-films/" + user;
+    }
+
+    @PostMapping("/user-films/{user}/rate")
+    public String rateFilm(
+            @AuthenticationPrincipal User currentUser,
+            @PathVariable Long user,
+            @RequestParam("id") Film film,
+            @RequestParam("backing3") Long backing3
+    ) {
+
+        FilmRating filmRating = new FilmRating();
+
+        filmRating.setUser(currentUser);
+        filmRating.setFilm(film);
+        filmRating.setRating(backing3);
+
+        film.setFilmRatings(Collections.singleton(filmRating));
+
+        filmRepository.save(film);
         return "redirect:/user-films/" + user;
     }
 }

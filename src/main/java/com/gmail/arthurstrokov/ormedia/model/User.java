@@ -42,6 +42,7 @@ public class User implements UserDetails {
     private Set<Film> films;
 
     @OneToMany(mappedBy = "user")
+    private
     Set<FilmRating> filmRatings;
 
     public boolean isAdmin() {

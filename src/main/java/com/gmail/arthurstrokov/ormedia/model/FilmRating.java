@@ -61,4 +61,11 @@ public class FilmRating {
     public void setRating(Long rating) {
         this.rating = rating;
     }
+
+    @Override
+    public String toString() {
+        return "FilmRating{" +
+                "rating=" + rating +
+                '}';
+    }
 }

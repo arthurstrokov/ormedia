@@ -31,7 +31,7 @@ public class Film {
     private String filename;
 
     @OneToMany(mappedBy = "film")
-    Set<FilmRating> filmRatings;
+    private Set<FilmRating> filmRatings;
 
     public Film() {
     }
