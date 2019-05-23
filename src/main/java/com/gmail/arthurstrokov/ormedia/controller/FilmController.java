@@ -153,19 +153,19 @@ public class FilmController {
         return "redirect:/user-films/" + user;
     }
 
-    @PostMapping("/user-films/{user}/rate")
+    @PostMapping(value = "/user-films/{user}/{film}/rate", produces = "application/json")
     public String rateFilm(
             @AuthenticationPrincipal User currentUser,
             @PathVariable Long user,
-            @RequestParam("id") Film film,
-            @RequestParam("backing3") Long backing3
+            @RequestParam("film_id") Film film,
+            @RequestParam("your_mark") Long your_mark
     ) {
 
         FilmRating filmRating = new FilmRating();
 
         filmRating.setUser(currentUser);
         filmRating.setFilm(film);
-        filmRating.setRating(backing3);
+        filmRating.setRating(your_mark);
 
         film.setFilmRatings(Collections.singleton(filmRating));
 

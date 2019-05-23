@@ -7,7 +7,7 @@
                 <img src="/img/${film.filename}" class="card-img-top">
             </#if>
             <div class="m-2">
-                <span>Title: ${film.title}</span><br/>
+                <i>Title: ${film.title}</i><br/>
                 <i>Genre: ${film.genre}</i><br/>
                 <i>Year: ${film.year}</i><br/>
 
@@ -17,7 +17,8 @@
                         <#assign total = total + filmRatings.rating>
                         <#assign size = size + 1>
                         <#if user == filmRatings.user>
-                            <i>Your mark: ${filmRatings.rating}</i>
+                            <i>Your mark: <i id="your_mark_${film.id}">${filmRatings.rating}</i></i>
+<#--                            <i>Your mark: <i id="your_mark">${filmRatings.rating}</i></i>-->
                         </#if>
                     </#list>
                     <#assign sum = total/size>
@@ -27,14 +28,17 @@
                     Not rated else
                 </#if>
 
-                <form method="post" action="/user-films/{user}/rate">
-                    <input type="range" min="0" max="5" value="0" step="1" id="backing3" name="backing3" hidden>
-                    <div class="rateit" data-rateit-backingfld="#backing3"></div>
+                <form method="post" action="/user-films/{user}/{film}/rate">
+                    <input type="hidden" name="_csrf" value="${_csrf.token}"/>
+                    <input type="range" min="0" max="5" value="0" step="1" id="rating_${film.id}" hidden>
+                    <div class="rateit film_ratings" id="rateit_your_mark_${film.id}"
+                         data-rateit-backingfld="#rating_${film.id}"
+                         user-id="${currentUserId}" film-id="${film.id}"></div>
                 </form>
 
             </div>
             <div class="card-footer text-muted">
-                <#--                <a href="/user-films/${film.author.id}">${film.authorName}</a>-->
+                <a href="/user-films/${film.author.id}" hidden>${film.authorName}</a>
                 <#if film.author.id == currentUserId>
                     <a class="btn btn-primary" href="/user-films/${film.author.id}?film=${film.id}">
                         Edit

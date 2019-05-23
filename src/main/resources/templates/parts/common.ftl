@@ -33,6 +33,7 @@
     <script src="//code.jquery.com/jquery.min.js"></script>
     <link href="/static/scripts/rateit.css" rel="stylesheet" type="text/css">
     <script src="/static/scripts/jquery.rateit.js"></script>
+    <script src="/static/scripts/extra.js"></script>
 
     </body>
     </html>
