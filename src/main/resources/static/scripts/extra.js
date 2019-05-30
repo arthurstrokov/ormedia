@@ -8,7 +8,7 @@ $(document).ready(function () {
             $(user_mark_id).text(value);
             $(`#rating_${film_id}`).attr('value', value);
             $.ajax({
-                url: "http://localhost:8080/user-films/" + user_id + "/" + film_id + "/rate",
+                url: "http://localhost:8080/user-films/" + user_id + "/" + "film/" + film_id + "/rate",
                 type: 'post',
                 data: {
                     id: film_id, rating: value
@@ -19,5 +19,13 @@ $(document).ready(function () {
                 }
             });
         });
+    });
+});
+
+$(function () {
+    var token = $("meta[name='_csrf']").attr("content");
+    var header = $("meta[name='_csrf_header']").attr("content");
+    $(document).ajaxSend(function(e, xhr, options) {
+        xhr.setRequestHeader(header, token);
     });
 });

@@ -28,8 +28,9 @@
                     Not rated else
                 </#if>
 
-                <form method="post" action="/user-films/{user}/{film}/rate">
-                    <input type="hidden" name="_csrf" value="${_csrf.token}"/>
+                <form method="post" action="/user-films/{user}/film/{film}/rate">
+                    <meta name="_csrf" content="${_csrf.token}"/>
+                    <meta name="_csrf_header" content="${_csrf.headerName}"/>
                     <input type="range" min="0" max="5" value="0" step="1" id="rating_${film.id}" hidden>
                     <div class="rateit film_ratings" id="rateit_your_mark_${film.id}"
                          data-rateit-backingfld="#rating_${film.id}"

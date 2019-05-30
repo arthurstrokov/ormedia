@@ -4,6 +4,7 @@ import com.gmail.arthurstrokov.ormedia.model.Film;
 import com.gmail.arthurstrokov.ormedia.model.FilmRating;
 import com.gmail.arthurstrokov.ormedia.model.User;
 import com.gmail.arthurstrokov.ormedia.repository.FilmRepository;
+import com.gmail.arthurstrokov.ormedia.repository.RatingRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -20,7 +21,6 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.validation.Valid;
 import java.io.File;
 import java.io.IOException;
-import java.util.Collections;
 import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
@@ -30,6 +30,9 @@ public class FilmController {
 
     @Autowired
     private FilmRepository filmRepository;
+
+    @Autowired
+    RatingRepository ratingRepository;
 
     @Value("${upload.path}")
     private String uploadPath;
@@ -153,23 +156,24 @@ public class FilmController {
         return "redirect:/user-films/" + user;
     }
 
-    @PostMapping(value = "/user-films/{user}/{film}/rate", produces = "application/json")
+    @PostMapping(value = "/user-films/{user}/film/{film}/rate", produces = "application/json")
     public String rateFilm(
             @AuthenticationPrincipal User currentUser,
             @PathVariable Long user,
             @RequestParam("film_id") Film film,
             @RequestParam("your_mark") Long your_mark
     ) {
-
         FilmRating filmRating = new FilmRating();
 
         filmRating.setUser(currentUser);
         filmRating.setFilm(film);
         filmRating.setRating(your_mark);
 
-        film.setFilmRatings(Collections.singleton(filmRating));
+        film.getFilmRatings().add(filmRating);
 
+        ratingRepository.save(filmRating);
         filmRepository.save(film);
+
         return "redirect:/user-films/" + user;
     }
 }
