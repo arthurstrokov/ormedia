@@ -11,7 +11,7 @@ $(document).ready(function () {
                 url: "http://localhost:8080/user-films/" + user_id + "/" + "film/" + film_id + "/rate",
                 type: 'post',
                 data: {
-                    id: film_id, rating: value
+                    user_id: user_id, film_id: film_id, rating: value
                 },
                 contentType: "application/json",
                 success: function (data) {
@@ -25,7 +25,7 @@ $(document).ready(function () {
 $(function () {
     var token = $("meta[name='_csrf']").attr("content");
     var header = $("meta[name='_csrf_header']").attr("content");
-    $(document).ajaxSend(function(e, xhr, options) {
+    $(document).ajaxSend(function (e, xhr, options) {
         xhr.setRequestHeader(header, token);
     });
 });

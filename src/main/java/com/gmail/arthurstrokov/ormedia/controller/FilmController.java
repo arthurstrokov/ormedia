@@ -156,7 +156,7 @@ public class FilmController {
         return "redirect:/user-films/" + user;
     }
 
-    @PostMapping(value = "/user-films/{user}/film/{film}/rate", produces = "application/json")
+    @PostMapping(value = "/user-films/{user}/film/{film}/rate")
     public String rateFilm(
             @AuthenticationPrincipal User currentUser,
             @PathVariable Long user,
@@ -174,6 +174,22 @@ public class FilmController {
         ratingRepository.save(filmRating);
         filmRepository.save(film);
 
-        return "redirect:/user-films/" + user;
+        return "user-films";
+    }
+
+    @GetMapping(value = "/user-films/{user}/film/{film}/rate", produces = "application/json")
+    public String rate(
+            @AuthenticationPrincipal User currentUser,
+            @PathVariable User user,
+            Model model,
+            @RequestParam(required = false) Film film
+    ) {
+        Set<Film> films = user.getFilms();
+
+        model.addAttribute("films", films);
+        model.addAttribute("film", film);
+        model.addAttribute("isCurrentUser", currentUser.equals(user));
+
+        return "userFilms";
     }
 }
