@@ -160,14 +160,14 @@ public class FilmController {
     public String rateFilm(
             @AuthenticationPrincipal User currentUser,
             @PathVariable Long user,
-            @RequestParam("film_id") Film film,
-            @RequestParam("your_mark") Long your_mark
+            @RequestParam("film") Film film,
+            @RequestParam("rating") Long rating
     ) {
         FilmRating filmRating = new FilmRating();
 
         filmRating.setUser(currentUser);
         filmRating.setFilm(film);
-        filmRating.setRating(your_mark);
+        filmRating.setRating(rating);
 
         film.getFilmRatings().add(filmRating);
 
@@ -190,6 +190,6 @@ public class FilmController {
         model.addAttribute("film", film);
         model.addAttribute("isCurrentUser", currentUser.equals(user));
 
-        return "userFilms";
+        return "user-films";
     }
 }

@@ -9,12 +9,18 @@ $(document).ready(function () {
             $(`#rating_${film_id}`).attr('value', value);
             $.ajax({
                 url: "http://localhost:8080/user-films/" + user_id + "/" + "film/" + film_id + "/rate",
-                type: 'post',
+                type: 'POST',
+                dataType : 'json',
                 data: {
-                    user_id: user_id, film_id: film_id, rating: value
+                    user: user_id, film: film_id, rating: value
                 },
-                contentType: "application/json",
+                header: {
+                    'Accept': 'application/json, text/plain, */*',
+                    'Content-Type': 'application/json'
+                },
+                contentType: 'application/json',
                 success: function (data) {
+                    onComplete();
                     console.info(data);
                 }
             });
