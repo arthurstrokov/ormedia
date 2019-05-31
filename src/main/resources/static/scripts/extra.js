@@ -8,7 +8,7 @@ $(document).ready(function () {
             $(user_mark_id).text(value);
             $(`#rating_${film_id}`).attr('value', value);
             $.ajax({
-                url: "http://localhost:8080/user-films/" + user_id + "/" + "film/" + film_id + "/rate",
+                url: "http://localhost:8080/user-films/" + user_id + "/rate",
                 type: 'POST',
                 dataType : 'json',
                 data: {

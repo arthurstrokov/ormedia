@@ -28,7 +28,7 @@
                     Not rated else
                 </#if>
 
-                <form method="post" action="/user-films/{user}/film/{film}/rate">
+                <form method="post" action="/user-films/{user}/rate">
                     <meta name="_csrf" content="${_csrf.token}"/>
                     <meta name="_csrf_header" content="${_csrf.headerName}"/>
                     <input type="range" min="0" max="5" value="0" step="1" id="rating_${film.id}" hidden>

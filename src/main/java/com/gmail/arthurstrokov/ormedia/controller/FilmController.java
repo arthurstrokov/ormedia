@@ -1,21 +1,18 @@
 package com.gmail.arthurstrokov.ormedia.controller;
 
 import com.gmail.arthurstrokov.ormedia.model.Film;
-import com.gmail.arthurstrokov.ormedia.model.FilmRating;
 import com.gmail.arthurstrokov.ormedia.model.User;
 import com.gmail.arthurstrokov.ormedia.repository.FilmRepository;
 import com.gmail.arthurstrokov.ormedia.repository.RatingRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.MediaType;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.util.StringUtils;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
@@ -156,14 +153,20 @@ public class FilmController {
         return "redirect:/user-films/" + user;
     }
 
-    @PostMapping(value = "/user-films/{user}/film/{film}/rate")
-    public String rateFilm(
+    @RequestMapping(value = "/user-films/{user}/rate", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
+    public @ResponseBody
+    String rating(
             @AuthenticationPrincipal User currentUser,
             @PathVariable Long user,
-            @RequestParam("film") Film film,
-            @RequestParam("rating") Long rating
+
+            @RequestParam("user_id") String user_id
+            //@RequestParam("rating") Long rating
     ) {
-        FilmRating filmRating = new FilmRating();
+        System.out.println("Hello rating controller!");
+        System.out.println(user);
+        System.out.println(user_id);
+
+        /*FilmRating filmRating = new FilmRating();
 
         filmRating.setUser(currentUser);
         filmRating.setFilm(film);
@@ -172,12 +175,12 @@ public class FilmController {
         film.getFilmRatings().add(filmRating);
 
         ratingRepository.save(filmRating);
-        filmRepository.save(film);
+        filmRepository.save(film);*/
 
-        return "user-films";
+        return "userFilms";
     }
 
-    @GetMapping(value = "/user-films/{user}/film/{film}/rate", produces = "application/json")
+    @GetMapping(value = "/user-films/{user}/rate", produces = "application/json")
     public String rate(
             @AuthenticationPrincipal User currentUser,
             @PathVariable User user,
