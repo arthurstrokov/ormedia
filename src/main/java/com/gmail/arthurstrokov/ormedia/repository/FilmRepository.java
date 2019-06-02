@@ -8,4 +8,6 @@ import java.util.List;
 public interface FilmRepository extends CrudRepository<Film, Long> {
 
     List<Film> findByTitle(String title);
+
+    Film findFilmById(Long filmId);
 }

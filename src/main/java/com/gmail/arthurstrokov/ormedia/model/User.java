@@ -41,9 +41,8 @@ public class User implements UserDetails {
     @OneToMany(mappedBy = "author", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private Set<Film> films;
 
-    @OneToMany(mappedBy = "user")
-    private
-    Set<FilmRating> filmRatings;
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    private Set<FilmRating> filmRatings;
 
     public boolean isAdmin() {
         return roles.contains(Role.ADMIN);

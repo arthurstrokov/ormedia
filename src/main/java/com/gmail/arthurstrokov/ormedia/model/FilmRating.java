@@ -1,21 +1,23 @@
 package com.gmail.arthurstrokov.ormedia.model;
 
 import javax.persistence.*;
+import java.util.Objects;
 
 @Entity
+@Table(name = "film_rating")
 public class FilmRating {
 
     @EmbeddedId
-    private FilmRatingKey id;
+    private FilmRatingKey filmRatingKeyId;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.EAGER)
     @MapsId("user_id")
-    @JoinColumn(name = "user_id")
+
     private User user;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.EAGER)
     @MapsId("film_id")
-    @JoinColumn(name = "film_id")
+
     private Film film;
 
     private Long rating;
@@ -23,19 +25,19 @@ public class FilmRating {
     public FilmRating() {
     }
 
-    public FilmRating(FilmRatingKey id, User user, Film film, Long rating) {
-        this.id = id;
+    public FilmRating(FilmRatingKey filmRatingKeyId, User user, Film film, Long rating) {
+        this.filmRatingKeyId = filmRatingKeyId;
         this.user = user;
         this.film = film;
         this.rating = rating;
     }
 
-    public FilmRatingKey getId() {
-        return id;
+    public FilmRatingKey getFilmRatingKeyId() {
+        return filmRatingKeyId;
     }
 
-    public void setId(FilmRatingKey id) {
-        this.id = id;
+    public void setFilmRatingKeyId(FilmRatingKey filmRatingKeyId) {
+        this.filmRatingKeyId = filmRatingKeyId;
     }
 
     public User getUser() {
@@ -65,7 +67,26 @@ public class FilmRating {
     @Override
     public String toString() {
         return "FilmRating{" +
-                "rating=" + rating +
+                "filmRatingKeyId=" + filmRatingKeyId +
+                ", user=" + user +
+                ", film=" + film +
+                ", rating=" + rating +
                 '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        FilmRating that = (FilmRating) o;
+        return Objects.equals(filmRatingKeyId, that.filmRatingKeyId) &&
+                Objects.equals(user, that.user) &&
+                Objects.equals(film, that.film) &&
+                Objects.equals(rating, that.rating);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(filmRatingKeyId, user, film, rating);
     }
 }

@@ -1,6 +1,7 @@
 package com.gmail.arthurstrokov.ormedia.controller;
 
 import com.gmail.arthurstrokov.ormedia.model.Film;
+import com.gmail.arthurstrokov.ormedia.model.FilmRating;
 import com.gmail.arthurstrokov.ormedia.model.User;
 import com.gmail.arthurstrokov.ormedia.repository.FilmRepository;
 import com.gmail.arthurstrokov.ormedia.repository.RatingRepository;
@@ -15,9 +16,12 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
+import java.util.Collections;
 import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
@@ -154,28 +158,40 @@ public class FilmController {
     }
 
     @RequestMapping(value = "/user-films/{user}/rate", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
-    public @ResponseBody
-    String rating(
+    @ResponseBody
+    public String rating(
+            HttpServletRequest request,
             @AuthenticationPrincipal User currentUser,
             @PathVariable Long user,
-
-            @RequestParam("user_id") String user_id
-            //@RequestParam("rating") Long rating
-    ) {
+            @RequestParam(value = "user_id", required = false) String user_id
+    ) throws IOException {
         System.out.println("Hello rating controller!");
-        System.out.println(user);
-        System.out.println(user_id);
+        System.out.println("User Id: " + user);
 
-        /*FilmRating filmRating = new FilmRating();
+        StringBuilder buffer = new StringBuilder();
+        BufferedReader reader = request.getReader();
+        String line;
+        while ((line = reader.readLine()) != null) {
+            buffer.append(line);
+        }
+        String data = buffer.toString();
+        System.out.println(data);
+
+        String regex = "[^\\d\\. ]| \\.|\\.$";
+        String parameters = data.replaceAll(regex, "");
+
+        String filmId = Character.toString(parameters.charAt(1));
+        String rating = Character.toString(parameters.charAt(2));
+
+        FilmRating filmRating = new FilmRating();
+
+        Film film = filmRepository.findFilmById(Long.valueOf(filmId));
 
         filmRating.setUser(currentUser);
         filmRating.setFilm(film);
-        filmRating.setRating(rating);
-
-        film.getFilmRatings().add(filmRating);
-
+        filmRating.setRating(Long.valueOf(rating));
+        film.setFilmRatings(Collections.singleton(filmRating));
         ratingRepository.save(filmRating);
-        filmRepository.save(film);*/
 
         return "userFilms";
     }

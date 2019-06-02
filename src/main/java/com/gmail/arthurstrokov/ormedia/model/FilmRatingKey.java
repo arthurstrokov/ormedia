@@ -1,17 +1,21 @@
 package com.gmail.arthurstrokov.ormedia.model;
 
-import javax.persistence.Column;
-import javax.persistence.Embeddable;
+import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Objects;
 
 @Embeddable
 public class FilmRatingKey implements Serializable {
 
-    @Column(name = "user_id")
+    @Column(name = "id", nullable = false)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "sequenceGenerator")
+    @SequenceGenerator(name = "sequenceGenerator")
+    private Long id;
+
+    @Column(name = "user_id", insertable = false, updatable = false)
     private Long userId;
 
-    @Column(name = "film_id")
+    @Column(name = "film_id", insertable = false, updatable = false)
     private Long filmId;
 
     public FilmRatingKey() {
@@ -36,6 +40,14 @@ public class FilmRatingKey implements Serializable {
 
     public void setFilmId(Long filmId) {
         this.filmId = filmId;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 
     @Override
