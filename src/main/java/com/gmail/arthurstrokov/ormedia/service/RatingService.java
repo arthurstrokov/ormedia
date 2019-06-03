@@ -22,10 +22,10 @@ public class RatingService {
     private static Logger logger = Logger.getAnonymousLogger();
 
     @Autowired
-    RatingRepository ratingRepository;
+    private RatingRepository ratingRepository;
 
     public void save(FilmRating filmRating) {
-        ratingRepository.save(filmRating);
+        ratingRepository.saveAndFlush(filmRating);
     }
 
     public FilmRating findByFilmIdAndUserId(Long filmId, Long userId) {

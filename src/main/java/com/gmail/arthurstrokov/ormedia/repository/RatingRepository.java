@@ -1,9 +1,9 @@
 package com.gmail.arthurstrokov.ormedia.repository;
 
 import com.gmail.arthurstrokov.ormedia.model.FilmRating;
-import org.springframework.data.repository.CrudRepository;
+import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface RatingRepository extends CrudRepository<FilmRating, Long> {
+public interface RatingRepository extends JpaRepository<FilmRating, Long> {
 
-        FilmRating findByFilmIdAndUserId(Long filmId, Long userId);
+    FilmRating findByFilmIdAndUserId(Long filmId, Long userId);
 }

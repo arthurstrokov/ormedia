@@ -19,6 +19,8 @@
                         <#if user == filmRatings.user>
                             <i>Your mark: <i id="your_mark_${film.id}">${filmRatings.rating}</i></i>
                         <#--                            <i>Your mark: <i id="your_mark">${filmRatings.rating}</i></i>-->
+                        <#else>
+                            Not rated else
                         </#if>
                     </#list>
                     <#assign sum = total/size>
