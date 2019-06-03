@@ -1,10 +1,12 @@
 package com.gmail.arthurstrokov.ormedia.model;
 
+import org.hibernate.annotations.Cascade;
 import org.hibernate.annotations.Type;
 import org.hibernate.validator.constraints.Length;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
+import java.util.HashSet;
 import java.util.Set;
 
 @Entity
@@ -30,8 +32,9 @@ public class Film {
 
     private String filename;
 
-    @OneToMany(mappedBy = "film")
-    private Set<FilmRating> filmRatings;
+    @OneToMany(mappedBy = "film", cascade = CascadeType.MERGE, orphanRemoval = true)
+    @Cascade(org.hibernate.annotations.CascadeType.MERGE)
+    private Set<FilmRating> filmRatings = new HashSet<>();
 
     public Film() {
     }

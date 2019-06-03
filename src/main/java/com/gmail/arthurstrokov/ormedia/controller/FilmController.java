@@ -5,6 +5,7 @@ import com.gmail.arthurstrokov.ormedia.model.FilmRating;
 import com.gmail.arthurstrokov.ormedia.model.User;
 import com.gmail.arthurstrokov.ormedia.repository.FilmRepository;
 import com.gmail.arthurstrokov.ormedia.repository.RatingRepository;
+import com.gmail.arthurstrokov.ormedia.service.FilmService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.MediaType;
@@ -34,6 +35,9 @@ public class FilmController {
 
     @Autowired
     RatingRepository ratingRepository;
+
+    @Autowired
+    FilmService filmService;
 
     @Value("${upload.path}")
     private String uploadPath;
@@ -162,8 +166,7 @@ public class FilmController {
     public String rating(
             HttpServletRequest request,
             @AuthenticationPrincipal User currentUser,
-            @PathVariable Long user,
-            @RequestParam(value = "user_id", required = false) String user_id
+            @PathVariable Long user
     ) throws IOException {
         System.out.println("Hello rating controller!");
         System.out.println("User Id: " + user);
@@ -190,25 +193,9 @@ public class FilmController {
         filmRating.setUser(currentUser);
         filmRating.setFilm(film);
         filmRating.setRating(Long.valueOf(rating));
-        film.setFilmRatings(Collections.singleton(filmRating));
-        ratingRepository.save(filmRating);
+
+        filmService.save(filmRating);
 
         return "userFilms";
-    }
-
-    @GetMapping(value = "/user-films/{user}/rate", produces = "application/json")
-    public String rate(
-            @AuthenticationPrincipal User currentUser,
-            @PathVariable User user,
-            Model model,
-            @RequestParam(required = false) Film film
-    ) {
-        Set<Film> films = user.getFilms();
-
-        model.addAttribute("films", films);
-        model.addAttribute("film", film);
-        model.addAttribute("isCurrentUser", currentUser.equals(user));
-
-        return "user-films";
     }
 }

@@ -7,17 +7,18 @@ import java.util.Objects;
 @Table(name = "film_rating")
 public class FilmRating {
 
-    @EmbeddedId
-    private FilmRatingKey filmRatingKeyId;
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private Long filmRatingKeyId;
 
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne(cascade = {CascadeType.ALL}, fetch = FetchType.EAGER)
     @MapsId("user_id")
-
+    @JoinColumn(name = "user_id", nullable = false, insertable = false, updatable = false)
     private User user;
 
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne(cascade = {CascadeType.ALL}, fetch = FetchType.EAGER)
+    @JoinColumn(name = "film_id", nullable = false, insertable = false, updatable = false)
     @MapsId("film_id")
-
     private Film film;
 
     private Long rating;
@@ -25,19 +26,11 @@ public class FilmRating {
     public FilmRating() {
     }
 
-    public FilmRating(FilmRatingKey filmRatingKeyId, User user, Film film, Long rating) {
+    public FilmRating(Long filmRatingKeyId, User user, Film film, Long rating) {
         this.filmRatingKeyId = filmRatingKeyId;
         this.user = user;
         this.film = film;
         this.rating = rating;
-    }
-
-    public FilmRatingKey getFilmRatingKeyId() {
-        return filmRatingKeyId;
-    }
-
-    public void setFilmRatingKeyId(FilmRatingKey filmRatingKeyId) {
-        this.filmRatingKeyId = filmRatingKeyId;
     }
 
     public User getUser() {
