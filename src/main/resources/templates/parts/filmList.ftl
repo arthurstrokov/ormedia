@@ -18,7 +18,7 @@
                         <#assign size = size + 1>
                         <#if user == filmRatings.user>
                             <i>Your mark: <i id="your_mark_${film.id}">${filmRatings.rating}</i></i>
-<#--                            <i>Your mark: <i id="your_mark">${filmRatings.rating}</i></i>-->
+                        <#--                            <i>Your mark: <i id="your_mark">${filmRatings.rating}</i></i>-->
                         </#if>
                     </#list>
                     <#assign sum = total/size>

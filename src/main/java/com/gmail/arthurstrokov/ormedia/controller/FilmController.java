@@ -3,7 +3,6 @@ package com.gmail.arthurstrokov.ormedia.controller;
 import com.gmail.arthurstrokov.ormedia.model.Film;
 import com.gmail.arthurstrokov.ormedia.model.FilmRating;
 import com.gmail.arthurstrokov.ormedia.model.User;
-import com.gmail.arthurstrokov.ormedia.repository.FilmRepository;
 import com.gmail.arthurstrokov.ormedia.service.FilmService;
 import com.gmail.arthurstrokov.ormedia.service.RatingService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,9 +18,9 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
-import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
@@ -30,10 +29,7 @@ import java.util.UUID;
 public class FilmController {
 
     @Autowired
-    private FilmRepository filmRepository;
-
-    @Autowired
-    FilmService filmService;
+    private FilmService filmService;
 
     @Autowired
     private RatingService ratingService;
@@ -51,9 +47,9 @@ public class FilmController {
         Iterable<Film> films;
 
         if (filter != null && !filter.isEmpty()) {
-            films = filmRepository.findByTitle(filter);
+            films = filmService.findByTitle(filter);
         } else {
-            films = filmRepository.findAll();
+            films = filmService.findAll();
         }
 
         model.addAttribute("films", films);
@@ -83,21 +79,16 @@ public class FilmController {
 
             model.addAttribute("film", null);
 
-            filmRepository.save(film);
+            filmService.save(film);
         }
 
-        Film findFilm = filmService.findById(film.getId());
-
         FilmRating filmRating = new FilmRating();
-
-
         filmRating.setUser(currentUser);
-        filmRating.setFilm(findFilm);
+        filmRating.setFilm(film);
         filmRating.setRating(0L);
-        System.out.println(filmRating);
         ratingService.save(filmRating);
 
-        Iterable<Film> films = filmRepository.findAll();
+        Iterable<Film> films = filmService.findAll();
 
         model.addAttribute("films", films);
         // TODO what else attributes? filter, success message maybe?
@@ -164,7 +155,7 @@ public class FilmController {
 
             uploadImage(film, file);
 
-            filmRepository.save(film);
+            filmService.save(film);
         }
         //TODO what is else branch?  How to show user success or failure?
 
@@ -175,36 +166,30 @@ public class FilmController {
     @ResponseBody
     public String rating(
             HttpServletRequest request,
-            @AuthenticationPrincipal User currentUser,
-            @PathVariable Long user
+            @AuthenticationPrincipal User currentUser
     ) throws IOException {
-        System.out.println("Hello rating controller!");
-        System.out.println("User Id: " + user);
 
-        StringBuilder buffer = new StringBuilder();
-        BufferedReader reader = request.getReader();
-        String line;
-        while ((line = reader.readLine()) != null) {
-            buffer.append(line);
-        }
-        String data = buffer.toString();
-        System.out.println(data);
+        List<String> parameters = RatingService.getParameters(request);
 
-        String regex = "[^\\d\\. ]| \\.|\\.$";
-        String parameters = data.replaceAll(regex, "");
+        String filmId = parameters.get(1);
+        String rating = parameters.get(2);
 
-        String filmId = Character.toString(parameters.charAt(1));
-        String rating = Character.toString(parameters.charAt(2));
+        Film film = filmService.findFilmById(Long.valueOf(filmId));
 
         FilmRating filmRating = ratingService.findByFilmIdAndUserId(Long.valueOf(filmId), currentUser.getId());
 
-        Film film = filmRepository.findFilmById(Long.valueOf(filmId));
-
-        filmRating.setUser(currentUser);
-        filmRating.setFilm(film);
-        filmRating.setRating(Long.valueOf(rating));
-
-        ratingService.save(filmRating);
+        if (filmRating.getFilmRatingKeyId() != null) {
+            filmRating.setUser(currentUser);
+            filmRating.setFilm(film);
+            filmRating.setRating(Long.valueOf(rating));
+            ratingService.save(filmRating);
+        } else {
+            FilmRating newfilmRating = new FilmRating();
+            newfilmRating.setUser(currentUser);
+            newfilmRating.setFilm(film);
+            newfilmRating.setRating(Long.valueOf(rating));
+            ratingService.save(newfilmRating);
+        }
 
         return "userFilms";
     }

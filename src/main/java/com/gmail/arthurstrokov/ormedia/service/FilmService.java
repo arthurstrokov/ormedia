@@ -14,7 +14,19 @@ public class FilmService {
     @Autowired
     private FilmRepository filmRepository;
 
-    public Film findById(Long id) {
-        return filmRepository.findFilmById(id);
+    public Iterable<Film> findByTitle(String filter) {
+        return filmRepository.findByTitle(filter);
+    }
+
+    public Iterable<Film> findAll() {
+        return filmRepository.findAll();
+    }
+
+    public void save(Film film) {
+        filmRepository.save(film);
+    }
+
+    public Film findFilmById(Long filmId) {
+        return filmRepository.findFilmById(filmId);
     }
 }

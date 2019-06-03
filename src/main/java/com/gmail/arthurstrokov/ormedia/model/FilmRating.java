@@ -7,17 +7,16 @@ import java.util.Objects;
 @Table(name = "film_rating")
 public class FilmRating {
 
-    @Id
-    @GeneratedValue
-    private Long filmRatingKeyId;
-
     @ManyToOne
     @JoinColumn(name = "user_id")
     User user;
-
     @ManyToOne
     @JoinColumn(name = "film_id")
     Film film;
+
+    @Id
+    @GeneratedValue
+    private Long filmRatingKeyId;
 
     private Long rating;
 

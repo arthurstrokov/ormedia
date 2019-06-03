@@ -5,7 +5,6 @@ import org.hibernate.validator.constraints.Length;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
-import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
 
@@ -33,6 +32,7 @@ public class Film {
     private String filename;
 
     @OneToMany(mappedBy = "film")
+    @ElementCollection(fetch = FetchType.EAGER)
     private Set<FilmRating> filmRatings;
 
     public Film() {

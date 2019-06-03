@@ -12,22 +12,23 @@
     $.fn.rateit = function (p1, p2) {
         //quick way out.
         var index = 1;
-        var options = {}; var mode = 'init';
+        var options = {};
+        var mode = 'init';
         var capitaliseFirstLetter = function (string) {
             return string.charAt(0).toUpperCase() + string.substr(1);
         };
 
-        if (this.length === 0) { return this; }
+        if (this.length === 0) {
+            return this;
+        }
 
 
         var tp1 = $.type(p1);
         if (tp1 == 'object' || p1 === undefined || p1 === null) {
             options = $.extend({}, $.fn.rateit.defaults, p1); //wants to init new rateit plugin(s).
-        }
-        else if (tp1 == 'string' && p1 !== 'reset' && p2 === undefined) {
+        } else if (tp1 == 'string' && p1 !== 'reset' && p2 === undefined) {
             return this.data('rateit' + capitaliseFirstLetter(p1)); //wants to get a value.
-        }
-        else if (tp1 == 'string') {
+        } else if (tp1 == 'string') {
             mode = 'setvalue';
         }
 
@@ -64,26 +65,35 @@
                     // If backing field is a select box with valuesrc option set to "index", reset its selectedIndex property; otherwise, reset its value.
                     if (fld[0].nodeName == 'SELECT' && fld[0].getAttribute('data-rateit-valuesrc') === 'index') {
                         fld.prop('selectedIndex', itemdata('value'));
-                    }
-                    else {
+                    } else {
                         fld.val(itemdata('value'));
                     }
                     fld.trigger('change');
-                    if (fld[0].min) { fld[0].min = itemdata('min'); }
-                    if (fld[0].max) { fld[0].max = itemdata('max'); }
-                    if (fld[0].step) { fld[0].step = itemdata('step'); }
+                    if (fld[0].min) {
+                        fld[0].min = itemdata('min');
+                    }
+                    if (fld[0].max) {
+                        fld[0].max = itemdata('max');
+                    }
+                    if (fld[0].step) {
+                        fld[0].step = itemdata('step');
+                    }
                 }
                 item.trigger('reset');
             }
 
             //add the rate it class.
-            if (!item.hasClass('rateit')) { item.addClass('rateit'); }
+            if (!item.hasClass('rateit')) {
+                item.addClass('rateit');
+            }
 
             var ltr = item.css('direction') != 'rtl';
 
             // set value mode
             if (mode == 'setvalue') {
-                if (!itemdata('init')) { throw 'Can\'t set value before init'; }
+                if (!itemdata('init')) {
+                    throw 'Can\'t set value before init';
+                }
 
 
                 //if readonly now and it wasn't readonly, remove the eventhandlers.
@@ -102,14 +112,23 @@
                     var fld = $(itemdata('backingfld'));
                     // If backing field is a select box with valuesrc option set to "index", update its selectedIndex property; otherwise, update its value.
                     if (fld[0].nodeName == 'SELECT' && fld[0].getAttribute('data-rateit-valuesrc') === 'index') {
-                        if (p1 == 'value') { fld.prop('selectedIndex', p2); }
+                        if (p1 == 'value') {
+                            fld.prop('selectedIndex', p2);
+                        }
+                    } else {
+                        if (p1 == 'value') {
+                            fld.val(p2);
+                        }
                     }
-                    else {
-                        if (p1 == 'value') { fld.val(p2); }
+                    if (p1 == 'min' && fld[0].min) {
+                        fld[0].min = p2;
                     }
-                    if (p1 == 'min' && fld[0].min) { fld[0].min = p2; }
-                    if (p1 == 'max' && fld[0].max) { fld[0].max = p2;}
-                    if (p1 == 'step' && fld[0].step) { fld[0].step = p2; }
+                    if (p1 == 'max' && fld[0].max) {
+                        fld[0].max = p2;
+                    }
+                    if (p1 == 'step' && fld[0].step) {
+                        fld[0].step = p2;
+                    }
                 }
 
                 itemdata(p1, p2);
@@ -156,8 +175,7 @@
                             itemdata('min', (!isNaN(itemdata('min')) ? itemdata('min') : Number(fld[0].options[0].index)));
                             itemdata('max', Number(fld[0].options[fld[0].length - 1].index));
                             itemdata('step', Number(fld[0].options[1].index) - Number(fld[0].options[0].index));
-                        }
-                        else {
+                        } else {
                             itemdata('min', (!isNaN(itemdata('min')) ? itemdata('min') : Number(fld[0].options[0].value)));
                             itemdata('max', Number(fld[0].options[fld[0].length - 1].value));
                             itemdata('step', Number(fld[0].options[1].value) - Number(fld[0].options[0].value));
@@ -168,22 +186,19 @@
                             // If backing field is a select box with valuesrc option set to "index", use the index of selected option; otherwise, use the value.
                             if (fld[0].getAttribute('data-rateit-valuesrc') === 'index') {
                                 itemdata('value', selectedOption[0].index);
-                            }
-                            else {
+                            } else {
                                 itemdata('value', selectedOption.val());
                             }
                         }
-                    }
-                    else {
+                    } else {
                         //if it is not a select box, we can get's it's value using the val function. 
                         //If it is a selectbox, we always get a value (the first one of the list), even if it was not explicity set.
                         itemdata('value', fld.val());
                     }
 
-                   
+
                 }
 
-              
 
                 //Create the necessary tags. For ARIA purposes we need to give the items an ID. So we use an internal index to create unique ids
                 var element = item[0].nodeName == 'DIV' ? 'div' : 'span';
@@ -202,8 +217,7 @@
 
                 if (itemdata('mode') == 'font') {
                     item.addClass('rateit-font').removeClass('rateit-bg');
-                }
-                else {
+                } else {
                     item.addClass('rateit-bg').removeClass('rateit-font');
                 }
 
@@ -211,8 +225,6 @@
             }
 
             var isfont = itemdata('mode') == 'font';
-
-            
 
 
             //resize the height of all elements, 
@@ -228,16 +240,15 @@
                 var stars = itemdata('max') - itemdata('min');
 
                 var txt = '';
-                for(var i = 0; i< stars; i++){
+                for (var i = 0; i < stars; i++) {
                     txt += icon;
                 }
-                
+
                 range.find('> *').text(txt);
-                
+
 
                 itemdata('starwidth', range.width() / (itemdata('max') - itemdata('min')))
-            }
-            else {
+            } else {
                 //set the range element to fit all the stars.
                 range.width(itemdata('starwidth') * (itemdata('max') - itemdata('min'))).height(itemdata('starheight'));
             }
@@ -247,8 +258,7 @@
             var presetclass = 'rateit-preset' + ((ltr) ? '' : '-rtl');
             if (itemdata('ispreset')) {
                 item.find('.rateit-selected').addClass(presetclass);
-            }
-            else {
+            } else {
                 item.find('.rateit-selected').removeClass(presetclass);
             }
 
@@ -283,9 +293,16 @@
                 var pageX = (event.changedTouches) ? event.changedTouches[0].pageX : event.pageX;
 
                 var offsetx = pageX - $(element).offset().left;
-                if (!ltr) { offsetx = range.width() - offsetx };
-                if (offsetx > range.width()) { offsetx = range.width(); }
-                if (offsetx < 0) { offsetx = 0; }
+                if (!ltr) {
+                    offsetx = range.width() - offsetx
+                }
+                ;
+                if (offsetx > range.width()) {
+                    offsetx = range.width();
+                }
+                if (offsetx < 0) {
+                    offsetx = 0;
+                }
 
                 return score = Math.ceil(offsetx / itemdata('starwidth') * (1 / itemdata('step')));
             };
@@ -314,8 +331,7 @@
                     // If backing field is a select box with valuesrc option set to "index", update its selectedIndex property; otherwise, update its value.
                     if (fld[0].nodeName == 'SELECT' && fld[0].getAttribute('data-rateit-valuesrc') === 'index') {
                         $(itemdata('backingfld')).prop('selectedIndex', value).trigger('change');
-                    }
-                    else {
+                    } else {
                         $(itemdata('backingfld')).val(value).trigger('change');
                     }
                 }
@@ -373,8 +389,7 @@
                 if (itemdata('resetable')) {
                     resetbtn.show();
                 }
-            }
-            else {
+            } else {
                 resetbtn.hide();
             }
 
@@ -386,28 +401,46 @@
     function touchHandler(event) {
 
         var touches = event.originalEvent.changedTouches,
-                first = touches[0],
-                type = "";
+            first = touches[0],
+            type = "";
         switch (event.type) {
-            case "touchmove": type = "mousemove"; break;
-            case "touchend": type = "mouseup"; break;
-            default: return;
+            case "touchmove":
+                type = "mousemove";
+                break;
+            case "touchend":
+                type = "mouseup";
+                break;
+            default:
+                return;
         }
 
         var simulatedEvent = document.createEvent("MouseEvent");
         simulatedEvent.initMouseEvent(type, true, true, window, 1,
-                              first.screenX, first.screenY,
-                              first.clientX, first.clientY, false,
-                              false, false, false, 0/*left*/, null);
+            first.screenX, first.screenY,
+            first.clientX, first.clientY, false,
+            false, false, false, 0/*left*/, null);
 
         first.target.dispatchEvent(simulatedEvent);
         event.preventDefault();
     };
 
     //some default values.
-    $.fn.rateit.defaults = { min: 0, max: 5, step: 0.5, mode: 'bg', icon: '★', starwidth: 16, starheight: 16, readonly: false, resetable: true, ispreset: false };
+    $.fn.rateit.defaults = {
+        min: 0,
+        max: 5,
+        step: 0.5,
+        mode: 'bg',
+        icon: '★',
+        starwidth: 16,
+        starheight: 16,
+        readonly: false,
+        resetable: true,
+        ispreset: false
+    };
 
     //invoke it on all .rateit elements. This could be removed if not wanted.
-    $(function () { $('div.rateit, span.rateit').rateit(); });
+    $(function () {
+        $('div.rateit, span.rateit').rateit();
+    });
 
 })(jQuery);
