@@ -4,8 +4,8 @@ import com.gmail.arthurstrokov.ormedia.model.Film;
 import com.gmail.arthurstrokov.ormedia.model.FilmRating;
 import com.gmail.arthurstrokov.ormedia.model.User;
 import com.gmail.arthurstrokov.ormedia.repository.FilmRepository;
-import com.gmail.arthurstrokov.ormedia.repository.RatingRepository;
 import com.gmail.arthurstrokov.ormedia.service.FilmService;
+import com.gmail.arthurstrokov.ormedia.service.RatingService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.MediaType;
@@ -22,7 +22,6 @@ import javax.validation.Valid;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
-import java.util.Collections;
 import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
@@ -34,10 +33,10 @@ public class FilmController {
     private FilmRepository filmRepository;
 
     @Autowired
-    RatingRepository ratingRepository;
+    FilmService filmService;
 
     @Autowired
-    FilmService filmService;
+    private RatingService ratingService;
 
     @Value("${upload.path}")
     private String uploadPath;
@@ -65,13 +64,13 @@ public class FilmController {
 
     @PostMapping("/main")
     public String addFilm(
-            @AuthenticationPrincipal User user,
+            @AuthenticationPrincipal User currentUser,
             @Valid Film film,
             BindingResult bindingResult,
             Model model,
             @RequestParam("file") MultipartFile file
     ) throws IOException {
-        film.setAuthor(user);
+        film.setAuthor(currentUser);
 
         if (bindingResult.hasErrors()) {
             Map<String, String> errorsMap = ControllerUtils.getErrors(bindingResult);
@@ -86,6 +85,17 @@ public class FilmController {
 
             filmRepository.save(film);
         }
+
+        Film findFilm = filmService.findById(film.getId());
+
+        FilmRating filmRating = new FilmRating();
+
+
+        filmRating.setUser(currentUser);
+        filmRating.setFilm(findFilm);
+        filmRating.setRating(0L);
+        System.out.println(filmRating);
+        ratingService.save(filmRating);
 
         Iterable<Film> films = filmRepository.findAll();
 
@@ -186,7 +196,7 @@ public class FilmController {
         String filmId = Character.toString(parameters.charAt(1));
         String rating = Character.toString(parameters.charAt(2));
 
-        FilmRating filmRating = new FilmRating();
+        FilmRating filmRating = ratingService.findByFilmIdAndUserId(Long.valueOf(filmId), currentUser.getId());
 
         Film film = filmRepository.findFilmById(Long.valueOf(filmId));
 
@@ -194,7 +204,7 @@ public class FilmController {
         filmRating.setFilm(film);
         filmRating.setRating(Long.valueOf(rating));
 
-        filmService.save(filmRating);
+        ratingService.save(filmRating);
 
         return "userFilms";
     }

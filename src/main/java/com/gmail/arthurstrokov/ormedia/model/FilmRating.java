@@ -8,18 +8,16 @@ import java.util.Objects;
 public class FilmRating {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue
     private Long filmRatingKeyId;
 
-    @ManyToOne(cascade = {CascadeType.ALL}, fetch = FetchType.EAGER)
-    @MapsId("user_id")
-    @JoinColumn(name = "user_id", nullable = false, insertable = false, updatable = false)
-    private User user;
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    User user;
 
-    @ManyToOne(cascade = {CascadeType.ALL}, fetch = FetchType.EAGER)
-    @JoinColumn(name = "film_id", nullable = false, insertable = false, updatable = false)
-    @MapsId("film_id")
-    private Film film;
+    @ManyToOne
+    @JoinColumn(name = "film_id")
+    Film film;
 
     private Long rating;
 
@@ -31,6 +29,14 @@ public class FilmRating {
         this.user = user;
         this.film = film;
         this.rating = rating;
+    }
+
+    public Long getFilmRatingKeyId() {
+        return filmRatingKeyId;
+    }
+
+    public void setFilmRatingKeyId(Long filmRatingKeyId) {
+        this.filmRatingKeyId = filmRatingKeyId;
     }
 
     public User getUser() {

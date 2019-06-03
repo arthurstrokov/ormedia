@@ -1,12 +1,12 @@
 package com.gmail.arthurstrokov.ormedia.model;
 
-import org.hibernate.annotations.Cascade;
 import org.hibernate.annotations.Type;
 import org.hibernate.validator.constraints.Length;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import java.util.HashSet;
+import java.util.Objects;
 import java.util.Set;
 
 @Entity
@@ -32,9 +32,8 @@ public class Film {
 
     private String filename;
 
-    @OneToMany(mappedBy = "film", cascade = CascadeType.MERGE, orphanRemoval = true)
-    @Cascade(org.hibernate.annotations.CascadeType.MERGE)
-    private Set<FilmRating> filmRatings = new HashSet<>();
+    @OneToMany(mappedBy = "film")
+    private Set<FilmRating> filmRatings;
 
     public Film() {
     }
@@ -58,14 +57,6 @@ public class Film {
         this.author = author;
     }
 
-    public String getGenre() {
-        return genre;
-    }
-
-    public void setGenre(String genre) {
-        this.genre = genre;
-    }
-
     public Long getId() {
         return id;
     }
@@ -82,12 +73,12 @@ public class Film {
         this.title = title;
     }
 
-    public String getFilename() {
-        return filename;
+    public String getGenre() {
+        return genre;
     }
 
-    public void setFilename(String filename) {
-        this.filename = filename;
+    public void setGenre(String genre) {
+        this.genre = genre;
     }
 
     public String getYear() {
@@ -96,6 +87,14 @@ public class Film {
 
     public void setYear(String year) {
         this.year = year;
+    }
+
+    public String getFilename() {
+        return filename;
+    }
+
+    public void setFilename(String filename) {
+        this.filename = filename;
     }
 
     public Set<FilmRating> getFilmRatings() {
@@ -117,5 +116,23 @@ public class Film {
                 ", filename='" + filename + '\'' +
                 ", filmRatings=" + filmRatings +
                 '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Film film = (Film) o;
+        return Objects.equals(id, film.id) &&
+                Objects.equals(title, film.title) &&
+                Objects.equals(genre, film.genre) &&
+                Objects.equals(year, film.year) &&
+                Objects.equals(author, film.author) &&
+                Objects.equals(filename, film.filename);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, title, genre, year, author, filename);
     }
 }
