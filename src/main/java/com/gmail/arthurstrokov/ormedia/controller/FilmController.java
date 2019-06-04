@@ -178,19 +178,19 @@ public class FilmController {
 
         FilmRating filmRating = ratingService.findByFilmIdAndUserId(Long.valueOf(filmId), currentUser.getId());
 
-        if (filmRating.getFilmRatingKeyId() != null) {
-            filmRating.setUser(currentUser);
-            filmRating.setFilm(film);
-            filmRating.setRating(Long.valueOf(rating));
-            ratingService.save(filmRating);
-        } else {
+        if (filmRating.getFilmRatingKeyId() == null) {
             FilmRating newfilmRating = new FilmRating();
             newfilmRating.setUser(currentUser);
             newfilmRating.setFilm(film);
             newfilmRating.setRating(Long.valueOf(rating));
             ratingService.save(newfilmRating);
-        }
 
+        } else {
+            filmRating.setUser(currentUser);
+            filmRating.setFilm(film);
+            filmRating.setRating(Long.valueOf(rating));
+            ratingService.save(filmRating);
+        }
 
         return "userFilms";
     }
