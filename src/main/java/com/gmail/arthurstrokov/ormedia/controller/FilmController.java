@@ -170,7 +170,6 @@ public class FilmController {
     ) throws IOException {
 
         List<String> parameters = RatingService.getParameters(request);
-
         String filmId = parameters.get(1);
         String rating = parameters.get(2);
 
@@ -178,7 +177,7 @@ public class FilmController {
 
         FilmRating filmRating = ratingService.findByFilmIdAndUserId(Long.valueOf(filmId), currentUser.getId());
 
-        if (filmRating.getFilmRatingKeyId() == null) {
+        if (filmRating == null) {
             FilmRating newfilmRating = new FilmRating();
             newfilmRating.setUser(currentUser);
             newfilmRating.setFilm(film);
@@ -186,8 +185,6 @@ public class FilmController {
             ratingService.save(newfilmRating);
 
         } else {
-            filmRating.setUser(currentUser);
-            filmRating.setFilm(film);
             filmRating.setRating(Long.valueOf(rating));
             ratingService.save(filmRating);
         }
